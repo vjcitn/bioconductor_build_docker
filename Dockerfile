@@ -10,11 +10,6 @@ LABEL name="nturaga/bioconductor_build_docker" \
 RUN apt-get update \
  	&& apt-get install -y --no-install-recommends apt-utils \
  	&& apt-get install -y --no-install-recommends \
- 	texlive \
- 	texlive-latex-extra \
- 	texlive-fonts-extra \
- 	texlive-bibtex-extra \
- 	texlive-science \
  	texi2html \
  	texinfo \
 	qpdf \
@@ -22,5 +17,9 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Required packages, so these are latest no matter what
-RUN R -e 'BiocManager::install(c("BiocStyle", "devtools", "BiocCheck", "roxygen2", "testthat", "knitr"))'
+RUN R -e 'BiocManager::install(c("BiocStyle", "devtools", "BiocCheck", "roxygen2", "testthat", "knitr", "tinytex"))'
+RUN R -e "tinytex::install_tinytex(); need = c('bera', 'titlesec', 'fancyhdr', 'enumitem', 'parskip', \
+	'nowidow', 'parnotes', \
+	'preprint', 'soul', 'placeins', 'ragged2e', 'footmisc', 'marginfix',\ 
+	'changepage', 'caption', 'xstring', 'mathtools'); lapply(need, tlmgr_install)"
 
